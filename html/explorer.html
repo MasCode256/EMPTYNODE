@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body style="padding-left: 1%">
+    <h3 id="current_dir">./</h3>
+    <p></p>
+    <div id="dir">
+      <div class="card">
+        <img class="icon" src="/icons/dir_ico.png" alt="" />
+        App
+      </div>
+    </div>
+  </body>
+  <script defer async>
+    async function fetch_text(url) {
+      try {
+        const response = await fetch(url); // Выполняем GET-запрос
+        if (!response.ok) {
+          // Проверяем, успешен ли ответ
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const text = await response.text(); // Получаем текст из ответа
+        return text; // Возвращаем текст
+      } catch (error) {
+        console.error("Error fetching text:", error); // Обработка ошибок
+      }
+    }
+
+    const dir = document.getElementById("dir");
+
+    var dirs = [];
+    var apps = [];
+
+    async function load_dirs() {
+      await fetch_text("/query?cmd=type%20fsys\\.dirs").then((text) => {
+        dirs = text.split("\n");
+        console.log(dirs);
+      });
+
+      console.log("pre-for");
+
+      for (let index = 0; index < dirs.length; index++) {
+        console.log("for " + index);
+
+        if (dirs[index] != "root" || dirs[index] != "root\r") {
+          console.log(dirs[index]);
+
+          dir.innerHTML +=
+            "<div class='card'>" +
+            "<img class='icon' src='/icons/dir_ico.png' alt='' />" +
+            dirs[index] +
+            "</div>";
+        }
+      }
+    }
+
+    async function load_applist(dir) {
+      await fetch_text("/query?dir=" + dir).then((text) => {
+        apps = text.split("\n");
+        console.log(apps);
+      });
+
+      console.log("pre-for2");
+
+      for (let index = 0; index < apps.length; index++) {
+        console.log("i = " + index + ", elem = " + apps[index]);
+
+        dir.innerHTML +=
+          "<div class='card'><img class='icon' src='/icons/app_ico.png' alt='' />" +
+          apps[index] +
+          "</div>";
+
+        console.log(dir.innerHTML);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", async function () {
+      await load_dirs();
+      await load_applist("root");
+    });
+  </script>
+</html>

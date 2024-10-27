@@ -32,3 +32,29 @@ async function set_style_by_json(jsonString) {
   // Запускаем установку переменных с пустым префиксом
   setVariables("", styles);
 }
+
+const dir = document.getElementById("dir");
+var dirs = [];
+
+async function load_dirs() {
+  await fetch_text("/query?cmd=type%20fsys\\.dirs").then((text) => {
+    dirs = text.split("\n");
+    console.log(dirs);
+  });
+
+  console.log("pre-for");
+
+  for (let index = 0; index < dirs.length; index++) {
+    console.log("for " + index);
+
+    if (dirs[index] != "root") {
+      dir.innerHTML +=
+        "<div class='card'>" +
+        "<img class='icon' src='/icons/dir_ico.png' alt='' />" +
+        dirs[index] +
+        "</div>";
+    }
+  }
+}
+
+async function load_applist(dir) {}

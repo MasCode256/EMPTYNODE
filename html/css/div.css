@@ -1,0 +1,34 @@
+.flex {
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+
+.content {
+  width: 100%;
+}
+
+.card {
+  width: 8%;
+  height: 10vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  transition: all var(--tt) ease-in-out;
+
+  font-family: var(--ff);
+
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.05);
+    color: var(----colors_primary);
+  }
+}
+
+#dir {
+  display: flex; /* Используем flexbox */
+  flex-wrap: wrap;
+}
